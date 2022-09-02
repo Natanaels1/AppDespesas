@@ -15,12 +15,12 @@ export default props => {
                 toValue: 0,
                 speed: 2,
                 bounciness: 20,
-                useNativeDriver: true
+                useNativeDriver: false
             }),
             Animated.timing(opacity, {
                 toValue: 1,
                 duration: 200,
-                useNativeDriver: true
+                useNativeDriver: false
             })
         ]).start()
 
@@ -28,7 +28,7 @@ export default props => {
 
     return (
         <View style={styles.container}>
-            <StatusBar style='auto' />
+            <StatusBar style='light' />
 
             <View>
                 <Text style={styles.title}>Seja o gestor da sua vida</Text>
@@ -43,7 +43,9 @@ export default props => {
 
                 <Image source={require('../../Assets/image.png')} style={{width: 380, height: 400}} />
 
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button} onPress={() => {
+                    props.navigation.navigate('Login')
+                }}>
                     <Text style={styles.title}> Start </Text>
                 </TouchableOpacity>
 
