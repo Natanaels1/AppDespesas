@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import app from '../services/firebase';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -49,8 +49,21 @@ function AuthProvider({ children }) {
 
     };
 
+    const registrationUser = async (dados) => {
+
+        createUserWithEmailAndPassword(auth, dados.email, dados.senha)
+        .then((userCredential) => {
+            const user = userCredential.user;
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+
+    }
+
     return (
-        <Context.Provider value={{ authenticated: authenticated, signIn }}>
+        <Context.Provider value={{ authenticated: authenticated, signIn, registrationUser }}>
             {children}
         </Context.Provider>
     );

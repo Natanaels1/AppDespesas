@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     button: {
-        width: 320,
+        width: 350,
         backgroundColor: 'purple',
         borderRadius: 30,
         height: 60,

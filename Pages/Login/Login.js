@@ -109,7 +109,9 @@ export default props => {
                 
             </Animated.View>
 
-            <TouchableOpacity style={{marginTop: 40}}>
+            <TouchableOpacity style={{marginTop: 40}} onPress={ () =>
+                props.navigation.navigate('Registration')
+            }>
                 <Text style={{color: '#ccc', fontSize: 18}}>Não possui cadastro? Clique aqui!</Text>
             </TouchableOpacity>
 
