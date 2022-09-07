@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import app from '../services/firebase';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { collection } from 'firebase/firestore';
+import { db } from '../services/firebase';
 
 const Context = createContext();
 
@@ -17,6 +18,8 @@ function AuthProvider({ children }) {
     const isAuthenticated = async () => {
         const token = await AsyncStorage.getItem("@AppDespesasToken");
 
+        console.warn(token)
+
         if(token) {
             setAuthenticated(true);
         }
@@ -28,12 +31,14 @@ function AuthProvider({ children }) {
         signInWithEmailAndPassword(auth, dados.email, dados.password)
         .then((userCredential) => {
             const user = userCredential.user;
+
+            console.log(user.uid)
             
             async function savedAsynstorage() {
                 try {
                     await AsyncStorage.setItem("@AppDespesasToken", JSON.stringify(user.idToken));
-                    await AsyncStorage.setItem("@AppDespesasNome", JSON.stringify(user.displayName));
                     await AsyncStorage.setItem("@AppDespesasEmail", JSON.stringify(user.email));
+                    await AsyncStorage.setItem("@AppDespesasIdUser", JSON.stringify(user.uid));
                 } catch {
                     console.log('err')
                 }
@@ -54,6 +59,12 @@ function AuthProvider({ children }) {
         createUserWithEmailAndPassword(auth, dados.email, dados.senha)
         .then((userCredential) => {
             const user = userCredential.user;
+
+            const users = collection(db, 'despesas')
+
+            users.doc(user.uid).set({
+                "teste": "testeeeee"
+            })
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -62,8 +73,13 @@ function AuthProvider({ children }) {
 
     }
 
+    const logout = async () => {
+        AsyncStorage.removeItem("@AppDespesasToken");
+        setAuthenticated(false);
+    }
+
     return (
-        <Context.Provider value={{ authenticated: authenticated, signIn, registrationUser }}>
+        <Context.Provider value={{ authenticated: authenticated, signIn, registrationUser, logout }}>
             {children}
         </Context.Provider>
     );

@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
         padding: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        bottom: 120
+        bottom: 160
     },
     input: {
         width: '100%',
